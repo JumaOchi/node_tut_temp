@@ -1,34 +1,18 @@
-// // const amount = 9
+    // Here we demonstrate an essential feature of stream
+    // Instead of sending in all the data which could be relatively large
+    // The data should be sent in chunks
 
-// // if (amount < 10) {
-// //     console.log('small number')
-// // } else {
-// //     console.log('large number')
-// // }
+var http = require('http')
+var fs = require('fs')
 
-// // console.log(`hey it's my first ode app!!!`)
-
-// console.log(__dirname)
-
-// setInterval(() => {
-//     console.log('Hello world')
-// }, 1000);
-
-//modules
-// const names = require('./names.js')
-// const sayHi = require('./utills.js')
-
-// sayHi('susan')
-// sayHi(names.john)
-// sayHi(names.peter)
-
-//package.json - manifest file (stores important info about project/package)
-// manual approach (create packages.json inn the root, create properties etc)
-//npm init (step by step, press enter to skip)
-//npm init -y (does it automatically)
-
-const _ = require('lodash')
-
-const items = [1,[2, [3, [4]]]]
-const newItems = _.flattenDeep(items)
-console.log(newItems)
+http
+    .createServer(function (req, res) {
+        const fileStream = fs.createReadStream('./content/big.txt','utf8');
+        fileStream.on('open',()=>{
+fileStream.pipe(res)
+        })
+        fileStream.on('error', (err)=>{
+            res.end(err)
+        })
+    })
+    .listen(5000)
